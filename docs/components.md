@@ -91,7 +91,7 @@ const [stemType, setStemType] = useState("vocals");
 ## `ProcessingState`
 
 **File:** `components/shared/ProcessingState.tsx`
-**Directive:** Server Component (no interactivity — pure display)
+**Directive:** None — renders as a server component by default. The parent (`app/upload/page.tsx`) is a client component that passes updated `progress` down as a prop.
 
 Animated processing screen shown while stems are being separated.
 
