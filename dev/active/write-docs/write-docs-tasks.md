@@ -34,18 +34,21 @@ Last Updated: 2026-04-19
 ## Phase 2 — Deployment & backend integration
 **Goal:** Developers can deploy and wire a real model without asking questions.
 
-- [ ] **P2-T1:** Write `docs/deployment.md`
-  - [ ] Vercel deploy instructions
-  - [ ] Manual Node.js deploy (`npm run build` → `npm start`)
-  - [ ] Environment variables (currently none; document placeholder pattern for future `STEM_API_URL` etc.)
-  - [ ] GitHub Actions CI skeleton for lint + build on PR
-- [ ] **P2-T2:** Write `docs/backend-integration.md`
-  - [ ] Explain that current processing is 100% simulated client-side (mock gap in `app/upload/page.tsx`)
-  - [ ] Document exact `Stem` interface the upload page passes to `<ResultPlayer>`
-  - [ ] Step-by-step: wire `app/api/upload/route.ts` to a Demucs subprocess
-  - [ ] Step-by-step: wire to a generic cloud REST API
-  - [ ] Note `URL.revokeObjectURL` cleanup gap in `UploadZone`
-  - [ ] Note that `app/upload/page.tsx` must be updated to actually call the API (currently bypasses it)
+- [x] **P2-T1:** Write `docs/deployment.md` *(done 2026-04-19)*
+  - [x] Railway/Fly/Render (recommended — no body size limit)
+  - [x] Vercel with 4.5 MB caveat + presigned upload alternative
+  - [x] Environment variables (`STEM_API_URL`, `STEM_API_KEY`)
+  - [x] GitHub Actions CI workflow
+- [x] **P2-T2:** Write `docs/backend-integration.md` *(done 2026-04-19)*
+  - [x] Explain mock gap (`startProcessing` never calls the route handler)
+  - [x] Step 1: wire `app/upload/page.tsx` to real `fetch("/api/upload")`
+  - [x] Step 2: widen `Stem.type` union in `ResultPlayer.tsx`
+  - [x] Step 3: route handler that proxies to Python service
+  - [x] Step 4: FastAPI + Demucs separate-service example
+  - [x] Replicate managed API alternative
+  - [x] `URL.revokeObjectURL` cleanup gap
+  - [x] No error state in upload flow
+  - [x] CORS requirement for output file URLs
 
 ---
 
