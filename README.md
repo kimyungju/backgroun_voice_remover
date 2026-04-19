@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StemAI — AI Audio Stem Separation
 
-## Getting Started
+A [lalal.ai](https://www.lalal.ai)-style web app that lets users separate vocals, drums, bass, guitar, and more from any audio or video track. Runs fully in the browser — no DAW or plugin required.
 
-First, run the development server:
+## Live demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+npm run dev   →  http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Pages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | Description |
+|-------|-------------|
+| `/` | Landing page — hero, how-it-works, stem-type grid, tools, pricing, testimonials |
+| `/upload` | Upload & process flow — drag-drop → stem selection → simulated processing → playback & download |
+| `/pricing` | Full 3-tier pricing table with feature comparison |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech stack
 
-## Learn More
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS v4 + CSS custom properties
+- **Icons:** lucide-react
+- **Upload:** react-dropzone (200 MB limit, audio/* + video/*)
+- **Fonts:** Syne (headings) · DM Sans (body) — loaded via Google Fonts
 
-To learn more about Next.js, take a look at the following resources:
+## Quick start
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# 1. Install dependencies
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 2. Start dev server
+npm run dev
+# → http://localhost:3000
 
-## Deploy on Vercel
+# 3. Build for production
+npm run build
+npm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Start dev server with Turbopack (hot reload) |
+| `npm run build` | Production build |
+| `npm start` | Run production server |
+| `npm run lint` | Run ESLint |
+
+## Project structure
+
+```
+app/
+├── layout.tsx          Root layout (Navbar + Footer wrapper)
+├── page.tsx            Landing page (section composition)
+├── upload/page.tsx     Upload & processing flow
+├── pricing/page.tsx    Pricing table
+└── api/upload/route.ts Mock processing API (POST)
+
+components/
+├── home/               Landing-page sections
+│   ├── HeroSection.tsx
+│   ├── HowItWorks.tsx
+│   ├── FeaturesGrid.tsx
+│   ├── ToolsSection.tsx
+│   ├── PricingSection.tsx
+│   └── TestimonialsSection.tsx
+├── layout/
+│   ├── Navbar.tsx
+│   └── Footer.tsx
+└── shared/             Reusable UI across pages
+    ├── UploadZone.tsx
+    ├── StemSelector.tsx
+    ├── ProcessingState.tsx
+    └── ResultPlayer.tsx
+
+public/
+└── samples/sample.mp3  Demo audio for download buttons
+```
+
+## Deployment
+
+Deploy to Vercel (zero config for Next.js):
+
+```bash
+npx vercel
+```
+
+Or any Node.js host that supports `next start`. No environment variables are required — all processing is currently simulated client-side.
+
+## Extending with a real backend
+
+The mock API lives in `app/api/upload/route.ts`. To swap in a real ML model:
+
+1. Accept the `FormData` (file + stemType) from the POST body.
+2. Run inference (e.g. Demucs, Spleeter, or a cloud API).
+3. Return `{ success: true, stems: [{ name, type, url }] }`.
+4. The upload page (`app/upload/page.tsx`) reads `stems` from the response and passes them to `<ResultPlayer />` — no other changes needed.
+
+## Contributing
+
+- Commit messages must not include AI attribution lines (`Co-Authored-By`, `Generated with`, etc.).
+- Run `npm run lint` before committing.
+- Prefer editing existing files over adding new ones.
